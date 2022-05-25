@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import UsersList from "../components/UsersList";
+import Card from "../../shared/components/UIElements/Card";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 
@@ -32,7 +33,19 @@ const Users = () => {
           <LoadingSpinner />
         </div>
       )}
-      {!isLoading && loadedUsers && <UsersList items={loadedUsers} />}
+      {!isLoading && loadedUsers.length === 0 && (
+        <div className="center card">
+          <Card>
+            <h2>
+              An app where ussers can see photos and descriptions of places
+              shared by other users and also share there own places for others!
+            </h2>
+          </Card>
+        </div>
+      )}
+      {!isLoading && loadedUsers.length > 0 && (
+        <UsersList items={loadedUsers} />
+      )}
     </Fragment>
   );
 };

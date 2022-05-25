@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
+import React, { Suspense, useContext } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import Users from "./user/pages/Users";
-import NewPlace from "./places/pages/NewPlace";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
-import UserPlaces from "./places/pages/UserPlaces";
-import UpdatePlace from "./places/pages/UpdatePlace";
+import LoadingSpinner from "./shared/components/UIElements/LoadingSpinner";
 
-import Auth from "./user/pages/Auth";
 import { AuthContext } from "./shared/context/auth-context";
+
+const Auth = React.lazy(() => import("./user/pages/Auth"));
+const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
+const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
+const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -39,7 +41,17 @@ function App() {
   return (
     <BrowserRouter>
       <MainNavigation />
-      <main>{routes}</main>
+      <main>
+        <Suspense
+          fallback={
+            <div className="center">
+              <LoadingSpinner />
+            </div>
+          }
+        >
+          {routes}
+        </Suspense>
+      </main>
     </BrowserRouter>
   );
 }
